@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey_light"
+        android:textSize="40sp"
+        android:lines="2"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"
+        android:text="@string/github_jargon" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey_dark"
+        android:layout_marginBottom="16dp"
+        android:text="@string/github_description" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_github_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/item_github_user" />
+
+</LinearLayout>
