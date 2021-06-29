@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_toRightOf="@+id/civ_profile_image"
+                android:layout_toEndOf="@+id/civ_profile_image"
                 android:textColor="@color/grey_light"
                 android:textSize="18sp"
                 android:lines="1"
@@ -48,10 +48,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_username"
-                android:layout_marginRight="5dp"
-                android:layout_toRightOf="@id/civ_profile_image"
+                android:layout_marginEnd="5dp"
+                android:layout_toEndOf="@id/civ_profile_image"
                 android:background="@drawable/rounded_corner_text"
-                android:drawableLeft="@drawable/ic_baseline_business_24"
                 android:drawablePadding="5dp"
                 android:ellipsize="end"
                 android:gravity="center"
@@ -60,7 +59,8 @@
                 android:paddingVertical="5dp"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                tools:text="Office" />
+                tools:text="Office"
+                app:drawableStartCompat="@drawable/ic_baseline_business_24" />
 
         </RelativeLayout>
 
