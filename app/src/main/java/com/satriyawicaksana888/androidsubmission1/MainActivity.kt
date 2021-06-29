@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.rvGithubUser.setHasFixedSize(true)
         list.addAll(getListUser())
-        showRecyclerCardview()
+        showRecyclerCardView()
     }
 
     private fun getListUser(): ArrayList<User> {
@@ -47,9 +47,9 @@ class MainActivity : AppCompatActivity() {
         dataAvatars.recycle()
         return listUser
     }
-    private fun showRecyclerCardview() {
+    private fun showRecyclerCardView() {
         binding.rvGithubUser.layoutManager = LinearLayoutManager(this)
-        val cardviewUserAdapter = CardViewAdapter(list, this)
-        binding.rvGithubUser.adapter = cardviewUserAdapter
+        val cardViewUserAdapter = CardViewAdapter(list, this)
+        binding.rvGithubUser.adapter = cardViewUserAdapter
     }
 }
