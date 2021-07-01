@@ -1,4 +1,4 @@
-package com.satriyawicaksana888.androidsubmission1.home
+package com.satriyawicaksana888.androidsubmission1.ui.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
