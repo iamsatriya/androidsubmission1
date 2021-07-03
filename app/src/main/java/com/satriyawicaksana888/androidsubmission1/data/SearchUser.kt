@@ -1,3 +1,6 @@
 package com.satriyawicaksana888.androidsubmission1.data
 
-data class SearchUser()
+class SearchUser {
+    var username: String? = null
+    var avatars: String? = null
+}
