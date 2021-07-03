@@ -6,6 +6,7 @@
     android:background="@color/black"
     android:orientation="vertical"
     android:padding="16dp"
+    android:id="@+id/fragment_home"
     tools:context=".ui.home.HomeFragment">
 
     <TextView
@@ -25,10 +26,10 @@
         android:text="@string/github_description"
         android:textColor="@color/grey_dark" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <!--<androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_github_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/item_github_user" />
+        tools:listitem="@layout/item_github_user" />-->
 
 </LinearLayout>
