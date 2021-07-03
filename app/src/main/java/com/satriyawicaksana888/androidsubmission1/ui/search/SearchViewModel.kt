@@ -1,8 +1,4 @@
-package com.satriyawicaksana888.androidsubmission1.ui.search
-
-import android.content.Context
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,8 +9,9 @@ import cz.msebera.android.httpclient.Header
 import org.json.JSONObject
 
 class SearchViewModel : ViewModel() {
-    val listLiveDataUser = MutableLiveData<ArrayList<SearchUser>>()
-    fun setListUser(username: String, context: Context) {
+    val listUsersLiveData = MutableLiveData<ArrayList<SearchUser>>()
+
+    fun setUserList(username: String) {
         val listUser = ArrayList<SearchUser>()
         val apiKey = "token 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"
         val url = "https://api.github.com/search/users?q=${username.trim()}"
@@ -31,20 +28,14 @@ class SearchViewModel : ViewModel() {
                 try {
                     val result = responseBody?.let { String(it) }
                     val responseArray = JSONObject(result).getJSONArray("items")
-                    if (responseArray.length() == 0) {
-                        showUserNotFound(true)
-                    } else {
-                        showUserNotFound(false)
-                        for (index in 0 until responseArray.length()) {
-                            val user = responseArray.getJSONObject(index)
-                            val userItem = SearchUser()
-                            userItem.username = user.getString("login")
-                            userItem.avatars = user.getString("avatar_url")
-                            listUser.add(userItem)
-                        }
-                        listLiveDataUser.postValue(listUser )
+                    for (index in 0 until responseArray.length()) {
+                        val user = responseArray.getJSONObject(index)
+                        val userItem = SearchUser()
+                        userItem.username = user.getString("login")
+                        userItem.avatars = user.getString("avatar_url")
+                        listUser.add(userItem)
                     }
-                    showLoading(false)
+                    listUsersLiveData.postValue(listUser)
                 } catch (e: Exception) {
                     Log.d("Failed to parse", ": ${e.message}")
                 }
@@ -60,23 +51,8 @@ class SearchViewModel : ViewModel() {
             }
         })
     }
-    private fun showUserNotFound(state: Boolean) {
-        if (state) {
-            binding.ivUserNotFound.visibility = View.VISIBLE
-        } else {
-            binding.ivUserNotFound.visibility = View.INVISIBLE
-        }
-    }
 
-    private fun showLoading(state: Boolean) {
-        if (state) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.INVISIBLE
-        }
-    }
-
-    fun getListUser(): LiveData<ArrayList<SearchUser>> {
-        return listLiveDataUser
+    fun getUserList(): LiveData<ArrayList<SearchUser>> {
+        return listUsersLiveData
     }
 }

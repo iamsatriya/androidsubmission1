@@ -1,5 +1,6 @@
 package com.satriyawicaksana888.androidsubmission1.ui.search
 
+import SearchViewModel
 import android.content.Context
 import android.content.res.TypedArray
 import android.os.Bundle
@@ -47,20 +48,55 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleView.setHasFixedSize(true)
-        searchViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(SearchViewModel::class.java)
+//        binding.etSearchUser.setOnEditorActionListener { v, actionId, event ->
+//            return@setOnEditorActionListener when (actionId) {
+//                EditorInfo.IME_ACTION_SEARCH -> {
+//                    showRecycleCardView(view.context, ArrayList())
+//                    showLoading(true)
+//                    fetchGithubUser(v.text.toString(), view.context)
+//                    closeSoftKeyboard()
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
+//        binding.etSearchUser.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//            }
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//            }
+//
+//            override fun afterTextChanged(s: Editable?) {
+//                val username = s.toString().trim()
+//                if (username.isNotEmpty()) {
+//                    showRecycleCardView(view.context, ArrayList())
+//                    showLoading(true)
+//                    fetchGithubUser(username, view.context)
+//                } else {
+//                    showRecycleCardView(view.context, ArrayList())
+//                }
+//            }
+//        })
+        showRecycleCardView(view.context, ArrayList())
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        searchViewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
         binding.etSearchUser.setOnEditorActionListener { v, actionId, event ->
             return@setOnEditorActionListener when (actionId) {
                 EditorInfo.IME_ACTION_SEARCH -> {
+                    view?.let { showRecycleCardView(it.context, ArrayList()) }
                     showLoading(true)
-                    //fetchGithubUser(v.text.toString(), view.context)
-                    searchViewModel.setListUser(v.text.toString(), view.context)
+                    searchViewModel.setUserList(v.text.toString())
                     closeSoftKeyboard()
                     true
                 }
                 else -> false
             }
         }
-        /*binding.etSearchUser.addTextChangedListener(object : TextWatcher {
+        binding.etSearchUser.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -70,16 +106,20 @@ class SearchFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 val username = s.toString().trim()
                 if (username.isNotEmpty()) {
-                    fetchGithubUser(username)
+                    showLoading(true)
+                    searchViewModel.setUserList(username)
+                } else {
                 }
             }
-        })*/
-        searchViewModel.getListUser().observe(this, {userItem ->
-            if (userItem != null) {
-                showRecycleCardView(view.context, list)
+        })
+        searchViewModel.getUserList().observe(viewLifecycleOwner, {userList ->
+            if (userList != null) {
+                view?.let { showRecycleCardView(it.context, userList) }
+                showLoading(false)
+            } else {
+                showUserNotFound(true)
             }
         })
-        showRecycleCardView(view.context, ArrayList())
     }
 
     private fun closeSoftKeyboard() {
@@ -154,6 +194,7 @@ class SearchFragment : Fragment() {
     private fun showRecycleCardView(context: Context, list: ArrayList<SearchUser>) {
         binding.recycleView.layoutManager = LinearLayoutManager(context)
         val cardViewUserAdapter = CardViewAdapter(list)
+        Log.e("List", "showRecycleCardView: $list", )
         binding.recycleView.adapter = cardViewUserAdapter
         cardViewUserAdapter.setOnItemClickCallback(object : CardViewAdapter.OnItemClickCallback {
             override fun onItemClicked(data: SearchUser) {
