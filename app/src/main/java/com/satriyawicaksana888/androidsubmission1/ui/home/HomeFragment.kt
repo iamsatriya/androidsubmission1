@@ -1,21 +1,12 @@
 package com.satriyawicaksana888.androidsubmission1.ui.home
 
-import android.content.Context
-import android.content.Intent
-import android.content.res.TypedArray
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.satriyawicaksana888.androidsubmission1.ProfileActivity
-import com.satriyawicaksana888.androidsubmission1.R
-import com.satriyawicaksana888.androidsubmission1.adapter.CardViewAdapter
 import com.satriyawicaksana888.androidsubmission1.data.SearchUser
-import com.satriyawicaksana888.androidsubmission1.data.User
 import com.satriyawicaksana888.androidsubmission1.databinding.FragmentHomeBinding
-import com.satriyawicaksana888.androidsubmission1.ui.detailuser.DetailUserFragment
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null

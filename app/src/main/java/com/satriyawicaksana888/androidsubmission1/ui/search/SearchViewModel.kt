@@ -13,7 +13,7 @@ class SearchViewModel : ViewModel() {
 
     fun setUserList(username: String) {
         val listUser = ArrayList<SearchUser>()
-        val apiKey = "token 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"
+        val apiKey = "token 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"
         val url = "https://api.github.com/search/users?q=${username.trim()}"
         val client = AsyncHttpClient()
         client.addHeader("Authorization", apiKey)

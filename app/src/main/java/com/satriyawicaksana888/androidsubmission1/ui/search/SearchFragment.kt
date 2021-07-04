@@ -2,7 +2,6 @@ package com.satriyawicaksana888.androidsubmission1.ui.search
 
 import SearchViewModel
 import android.content.Context
-import android.content.res.TypedArray
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,13 +15,10 @@ import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.loopj.android.http.AsyncHttpClient
-import com.loopj.android.http.AsyncHttpRequest
 import com.loopj.android.http.AsyncHttpResponseHandler
-import com.loopj.android.http.SyncHttpClient
 import com.satriyawicaksana888.androidsubmission1.R
 import com.satriyawicaksana888.androidsubmission1.adapter.CardViewAdapter
 import com.satriyawicaksana888.androidsubmission1.data.SearchUser
-import com.satriyawicaksana888.androidsubmission1.data.User
 import com.satriyawicaksana888.androidsubmission1.databinding.FragmentSearchBinding
 import com.satriyawicaksana888.androidsubmission1.ui.detailuser.DetailUserFragment
 import cz.msebera.android.httpclient.Header
@@ -194,7 +190,6 @@ class SearchFragment : Fragment() {
     private fun showRecycleCardView(context: Context, list: ArrayList<SearchUser>) {
         binding.recycleView.layoutManager = LinearLayoutManager(context)
         val cardViewUserAdapter = CardViewAdapter(list)
-        Log.e("List", "showRecycleCardView: $list", )
         binding.recycleView.adapter = cardViewUserAdapter
         cardViewUserAdapter.setOnItemClickCallback(object : CardViewAdapter.OnItemClickCallback {
             override fun onItemClicked(data: SearchUser) {

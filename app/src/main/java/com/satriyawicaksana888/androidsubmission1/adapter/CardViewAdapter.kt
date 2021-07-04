@@ -18,6 +18,7 @@ class CardViewAdapter(private val listUser: ArrayList<SearchUser>) :
             with(binding) {
                 civProfileImage.load(user.avatars)
                 tvUsername.text = user.username
+                itemView.setOnClickListener { onItemClickCallback?.onItemClicked(user) }
             }
         }
     }
