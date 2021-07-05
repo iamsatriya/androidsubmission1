@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import coil.load
 import com.satriyawicaksana888.androidsubmission1.data.User
 import com.satriyawicaksana888.androidsubmission1.databinding.ActivityProfileBinding
 
@@ -20,6 +21,7 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
         val user = intent.getParcelableExtra<User>(EXTRA_USER) as User
         binding.civProfileImage.setImageResource(user.avatars)
+        binding.civProfileImage.load(user.avatarUrl)
         binding.tvName.text = user.name
         binding.tvUsername.text = user.username
         binding.tvCompany.text = user.company
