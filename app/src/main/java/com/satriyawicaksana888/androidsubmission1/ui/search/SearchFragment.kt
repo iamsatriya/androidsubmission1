@@ -34,10 +34,6 @@ class SearchFragment : Fragment() {
 
     private lateinit var searchViewModel: SearchViewModel
 
-    companion object {
-        private val TAG = SearchFragment::class.java.simpleName
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

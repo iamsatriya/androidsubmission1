@@ -120,4 +120,6 @@
     <string name="home">Home</string>
     <string name="search">Search</string>
     <string name="profile">Profile</string>
+    <string name="tab_title_1">Followers</string>
+    <string name="tab_title_2">Following</string>
 </resources>

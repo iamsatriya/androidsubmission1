@@ -6,12 +6,18 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
+import com.google.android.material.tabs.TabLayoutMediator
+import com.satriyawicaksana888.androidsubmission1.adapter.SectionPagerAdapter
 import com.satriyawicaksana888.androidsubmission1.data.User
 import com.satriyawicaksana888.androidsubmission1.databinding.ActivityProfileBinding
 
 class ProfileActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_USER = "extra_user"
+        private val TAB_TITLES = intArrayOf(
+            R.string.tab_title_1,
+            R.string.tab_title_2,
+        )
     }
 
     private lateinit var binding: ActivityProfileBinding
@@ -26,8 +32,8 @@ class ProfileActivity : AppCompatActivity() {
         binding.tvCompany.text = user.company
         binding.tvLocation.text = user.location
         binding.tvRepository.text = user.repository
-        binding.tvFollowers.text = user.followers
-        binding.tvFollowing.text = user.following
+//        binding.tvFollowers.text = user.followers
+//        binding.tvFollowing.text = user.following
         binding.ibShare.setOnClickListener {
             val mIntent = Intent()
             mIntent.action = Intent.ACTION_SEND
@@ -37,5 +43,10 @@ class ProfileActivity : AppCompatActivity() {
                 startActivity(mIntent)
             }
         }
+        val sectionPageAdapter = SectionPagerAdapter(this)
+        binding.vpFollow.adapter = sectionPageAdapter
+        TabLayoutMediator(binding.tlFollow, binding.vpFollow) {
+            tab, position -> tab.text = resources.getString(TAB_TITLES[position])
+        }.attach()
     }
 }
