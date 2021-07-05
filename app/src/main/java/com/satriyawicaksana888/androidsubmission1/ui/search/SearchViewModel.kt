@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import com.satriyawicaksana888.androidsubmission1.data.SearchUser
+import com.satriyawicaksana888.androidsubmission1.utility.GithubAccess
 import cz.msebera.android.httpclient.Header
 import org.json.JSONObject
 
@@ -13,13 +14,8 @@ class SearchViewModel : ViewModel() {
 
     fun setUserList(username: String) {
         val listUser = ArrayList<SearchUser>()
-        val apiKey = "token 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"
-        val url = "https://api.github.com/search/users?q=${username.trim()}"
-        val client = AsyncHttpClient()
-        client.addHeader("Authorization", apiKey)
-        client.addHeader("User-Agent", "request")
-        client.addHeader("Accept", "application/vnd.github.v3+json")
-        client.get(url, object : AsyncHttpResponseHandler() {
+        val client = GithubAccess.createClient()
+        client.get(GithubAccess.urlUserList(username), object : AsyncHttpResponseHandler() {
             override fun onSuccess(
                 statusCode: Int,
                 headers: Array<out Header>?,
