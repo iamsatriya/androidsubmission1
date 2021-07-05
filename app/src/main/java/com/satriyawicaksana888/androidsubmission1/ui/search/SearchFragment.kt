@@ -100,53 +100,6 @@ class SearchFragment : Fragment() {
         imm.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
-    private fun fetchGithubUser(username: String, context: Context) {
-        val listUser = ArrayList<SearchUser>()
-        val apiKey = "token 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"
-        val url = "https://api.github.com/search/users?q=${username.trim()}"
-        val client = AsyncHttpClient()
-        client.addHeader("Authorization", apiKey)
-        client.addHeader("User-Agent", "request")
-        client.addHeader("Accept", "application/vnd.github.v3+json")
-        client.get(url, object : AsyncHttpResponseHandler() {
-            override fun onSuccess(
-                statusCode: Int,
-                headers: Array<out Header>?,
-                responseBody: ByteArray?
-            ) {
-                try {
-                    val result = responseBody?.let { String(it) }
-                    val responseArray = JSONObject(result).getJSONArray("items")
-                    if (responseArray.length() == 0) {
-                        showUserNotFound(true)
-                    } else {
-                        showUserNotFound(false)
-                        for (index in 0 until responseArray.length()) {
-                            val user = responseArray.getJSONObject(index)
-                            val userItem = SearchUser()
-                            userItem.username = user.getString("login")
-                            userItem.avatars = user.getString("avatar_url")
-                            listUser.add(userItem)
-                        }
-                        showRecycleCardView(context, listUser)
-                    }
-                    showLoading(false)
-                } catch (e: Exception) {
-                    Log.d("Failed to parse", ": ${e.message}")
-                }
-            }
-
-            override fun onFailure(
-                statusCode: Int,
-                headers: Array<out Header>?,
-                responseBody: ByteArray?,
-                error: Throwable?
-            ) {
-                Log.d("Failed to fetch", ": ${error?.message.toString()}")
-            }
-        })
-    }
-
     private fun showUserNotFound(state: Boolean) {
         if (state) {
             binding.ivUserNotFound.visibility = View.VISIBLE
