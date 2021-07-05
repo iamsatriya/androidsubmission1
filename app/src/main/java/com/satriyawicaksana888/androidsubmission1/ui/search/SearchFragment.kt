@@ -2,25 +2,27 @@ package com.satriyawicaksana888.androidsubmission1.ui.search
 
 import SearchViewModel
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
-import com.satriyawicaksana888.androidsubmission1.R
+import com.satriyawicaksana888.androidsubmission1.ProfileActivity
 import com.satriyawicaksana888.androidsubmission1.adapter.CardViewAdapter
 import com.satriyawicaksana888.androidsubmission1.data.SearchUser
+import com.satriyawicaksana888.androidsubmission1.data.User
 import com.satriyawicaksana888.androidsubmission1.databinding.FragmentSearchBinding
-import com.satriyawicaksana888.androidsubmission1.ui.detailuser.DetailUserFragment
+import com.satriyawicaksana888.androidsubmission1.utility.GithubAccess
 import cz.msebera.android.httpclient.Header
 import org.json.JSONObject
 import java.util.*
@@ -31,6 +33,10 @@ class SearchFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var searchViewModel: SearchViewModel
+
+    companion object {
+        private val TAG = SearchFragment::class.java.simpleName
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,36 +50,6 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleView.setHasFixedSize(true)
-//        binding.etSearchUser.setOnEditorActionListener { v, actionId, event ->
-//            return@setOnEditorActionListener when (actionId) {
-//                EditorInfo.IME_ACTION_SEARCH -> {
-//                    showRecycleCardView(view.context, ArrayList())
-//                    showLoading(true)
-//                    fetchGithubUser(v.text.toString(), view.context)
-//                    closeSoftKeyboard()
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
-//        binding.etSearchUser.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//            }
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//            }
-//
-//            override fun afterTextChanged(s: Editable?) {
-//                val username = s.toString().trim()
-//                if (username.isNotEmpty()) {
-//                    showRecycleCardView(view.context, ArrayList())
-//                    showLoading(true)
-//                    fetchGithubUser(username, view.context)
-//                } else {
-//                    showRecycleCardView(view.context, ArrayList())
-//                }
-//            }
-//        })
         showRecycleCardView(view.context, ArrayList())
     }
 
@@ -92,7 +68,7 @@ class SearchFragment : Fragment() {
                 else -> false
             }
         }
-        binding.etSearchUser.addTextChangedListener(object : TextWatcher{
+        binding.etSearchUser.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -108,7 +84,7 @@ class SearchFragment : Fragment() {
                 }
             }
         })
-        searchViewModel.getUserList().observe(viewLifecycleOwner, {userList ->
+        searchViewModel.getUserList().observe(viewLifecycleOwner, { userList ->
             if (userList != null) {
                 view?.let { showRecycleCardView(it.context, userList) }
                 showLoading(false)
@@ -193,20 +169,55 @@ class SearchFragment : Fragment() {
         binding.recycleView.adapter = cardViewUserAdapter
         cardViewUserAdapter.setOnItemClickCallback(object : CardViewAdapter.OnItemClickCallback {
             override fun onItemClicked(data: SearchUser) {
-                val mDetailUserFragment = DetailUserFragment()
-                val mBundle = Bundle()
-                mBundle.putString(DetailUserFragment.EXTRA_USER, data.username)
-                mDetailUserFragment.arguments = mBundle
-                val mFragmentManager = fragmentManager
-                mFragmentManager?.beginTransaction()?.apply {
-                    replace(
-                        R.id.nav_host_fragment,
-                        mDetailUserFragment,
-                        DetailUserFragment::class.java.simpleName
+                openDetailUser(data.username, context)
+            }
+        })
+    }
+
+    private fun openDetailUser(username: String?, context: Context) {
+        val client = GithubAccess.createClient()
+        client.get(username?.let { GithubAccess.urlDetailUser(it) }, object : AsyncHttpResponseHandler() {
+            override fun onSuccess(
+                statusCode: Int,
+                headers: Array<out Header>?,
+                responseBody: ByteArray?
+            ) {
+                try {
+                    val result = JSONObject(responseBody?.let { String(it) })
+                    val name = result.getString("name")
+                    val company = result.getString("company")
+                    val location = result.getString("location")
+                    val followers = result.getInt("followers").toString()
+                    val following = result.getInt("following").toString()
+                    val repository = result.getInt("public_repos").toString()
+                    val avatarUrl = result.getString("avatar_url")
+                    val htmlUrl = result.getString("html_url")
+                    val githubUser = User(
+                        username,
+                        name,
+                        location,
+                        repository,
+                        company,
+                        followers,
+                        following,
+                        avatarUrl,
+                        htmlUrl
                     )
-                    addToBackStack(null)
-                    commit()
+                    val mIntent = Intent(context, ProfileActivity::class.java)
+                    mIntent.putExtra(ProfileActivity.EXTRA_USER, githubUser)
+                    context.startActivity(mIntent)
+                } catch (e: Exception) {
+                    Log.d(TAG, "onFailedToFetch: ${e.message}")
                 }
+            }
+
+            override fun onFailure(
+                statusCode: Int,
+                headers: Array<out Header>?,
+                responseBody: ByteArray?,
+                error: Throwable?
+            ) {
+                Log.d(TAG, "onFailure: ${error?.message}")
             }
         })
     }
