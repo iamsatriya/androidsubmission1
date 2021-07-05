@@ -20,7 +20,6 @@ class ProfileActivity : AppCompatActivity() {
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val user = intent.getParcelableExtra<User>(EXTRA_USER) as User
-        binding.civProfileImage.setImageResource(user.avatars)
         binding.civProfileImage.load(user.avatarUrl)
         binding.tvName.text = user.name
         binding.tvUsername.text = user.username
@@ -32,7 +31,7 @@ class ProfileActivity : AppCompatActivity() {
         binding.ibShare.setOnClickListener {
             val mIntent = Intent()
             mIntent.action = Intent.ACTION_SEND
-            mIntent.putExtra(Intent.EXTRA_TEXT, "https://www.github.com/${binding.tvUsername.text}")
+            mIntent.putExtra(Intent.EXTRA_TEXT, user.htmlUrl)
             mIntent.type = "text/plain"
             if (intent.resolveActivity(packageManager) != null) {
                 startActivity(mIntent)
