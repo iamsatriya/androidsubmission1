@@ -122,55 +122,7 @@ class SearchFragment : Fragment() {
         binding.recycleView.adapter = cardViewUserAdapter
         cardViewUserAdapter.setOnItemClickCallback(object : CardViewAdapter.OnItemClickCallback {
             override fun onItemClicked(data: SearchUser) {
-                openDetailUser(data.username, context)
-            }
-        })
-    }
-
-    private fun openDetailUser(username: String?, context: Context) {
-        val client = GithubAccess.createClient()
-        client.get(username?.let { GithubAccess.urlDetailUser(it) }, object : AsyncHttpResponseHandler() {
-            override fun onSuccess(
-                statusCode: Int,
-                headers: Array<out Header>?,
-                responseBody: ByteArray?
-            ) {
-                try {
-                    val result = JSONObject(responseBody?.let { String(it) })
-                    val name = result.getString("name")
-                    val company = result.getString("company")
-                    val location = result.getString("location")
-                    val followers = result.getInt("followers").toString()
-                    val following = result.getInt("following").toString()
-                    val repository = result.getInt("public_repos").toString()
-                    val avatarUrl = result.getString("avatar_url")
-                    val htmlUrl = result.getString("html_url")
-                    val githubUser = User(
-                        username,
-                        name,
-                        location,
-                        repository,
-                        company,
-                        followers,
-                        following,
-                        avatarUrl,
-                        htmlUrl
-                    )
-                    val mIntent = Intent(context, ProfileActivity::class.java)
-                    mIntent.putExtra(ProfileActivity.EXTRA_USER, githubUser)
-                    context.startActivity(mIntent)
-                } catch (e: Exception) {
-                    Log.d(TAG, "onFailedToFetch: ${e.message}")
-                }
-            }
-
-            override fun onFailure(
-                statusCode: Int,
-                headers: Array<out Header>?,
-                responseBody: ByteArray?,
-                error: Throwable?
-            ) {
-                Log.d(TAG, "onFailure: ${error?.message}")
+                searchViewModel.openDetailUser(data.username, context)
             }
         })
     }
