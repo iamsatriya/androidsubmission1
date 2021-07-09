@@ -1,9 +1,7 @@
 package com.satriyawicaksana888.androidsubmission1
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.google.android.material.tabs.TabLayoutMediator
@@ -32,8 +30,6 @@ class ProfileActivity : AppCompatActivity() {
         binding.tvCompany.text = user.company
         binding.tvLocation.text = user.location
         binding.tvRepository.text = user.repository
-//        binding.tvFollowers.text = user.followers
-//        binding.tvFollowing.text = user.following
         binding.ibShare.setOnClickListener {
             val mIntent = Intent()
             mIntent.action = Intent.ACTION_SEND
@@ -43,10 +39,11 @@ class ProfileActivity : AppCompatActivity() {
                 startActivity(mIntent)
             }
         }
-        val sectionPageAdapter = SectionPagerAdapter(this)
+        val sectionPageAdapter = user.username?.let { SectionPagerAdapter(this, username = it) }
         binding.vpFollow.adapter = sectionPageAdapter
         TabLayoutMediator(binding.tlFollow, binding.vpFollow) {
             tab, position -> tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
     }
+
 }

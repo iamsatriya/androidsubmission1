@@ -7,14 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.satriyawicaksana888.androidsubmission1.R
 import com.satriyawicaksana888.androidsubmission1.adapter.CardViewAdapter
 import com.satriyawicaksana888.androidsubmission1.databinding.FollowersFragmentBinding
 
 class FollowersFragment : Fragment() {
 
     companion object {
-        fun newInstance() = FollowersFragment()
+        const val EXTRA_USERNAME = "extra_username_followers"
     }
 
     private lateinit var viewModel: FollowersViewModel
@@ -22,7 +21,8 @@ class FollowersFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FollowersFragmentBinding.inflate(inflater, container, false)
@@ -31,22 +31,19 @@ class FollowersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*binding.rvFollowers.hasFixedSize(true)
-        binding.rvFollowers.layoutManager = LinearLayoutManager(view.context)
-
-        val followerAdapter = CardViewAdapter()*/
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(FollowersViewModel::class.java)
-        /*binding.rvFollowers.setHasFixedSize(true)
-        binding.rvFollowers.layoutManager = LinearLayoutManager(this.context)*/
-
+        binding.rvFollowers.setHasFixedSize(true)
+        binding.rvFollowers.layoutManager = LinearLayoutManager(this.context)
+        val username = arguments?.getString(EXTRA_USERNAME)
+        viewModel.setListFolllowers(username)
+        viewModel.getListFollowers().observe(viewLifecycleOwner, { list ->
+            binding.rvFollowers.adapter = CardViewAdapter(list)
+        })
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
+
 }

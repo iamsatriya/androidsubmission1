@@ -2,11 +2,9 @@ package com.satriyawicaksana888.androidsubmission1.ui.search
 
 import SearchViewModel
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,16 +13,9 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.loopj.android.http.AsyncHttpClient
-import com.loopj.android.http.AsyncHttpResponseHandler
-import com.satriyawicaksana888.androidsubmission1.ProfileActivity
 import com.satriyawicaksana888.androidsubmission1.adapter.CardViewAdapter
 import com.satriyawicaksana888.androidsubmission1.data.SearchUser
-import com.satriyawicaksana888.androidsubmission1.data.User
 import com.satriyawicaksana888.androidsubmission1.databinding.FragmentSearchBinding
-import com.satriyawicaksana888.androidsubmission1.utility.GithubAccess
-import cz.msebera.android.httpclient.Header
-import org.json.JSONObject
 import java.util.*
 import kotlin.collections.ArrayList
 

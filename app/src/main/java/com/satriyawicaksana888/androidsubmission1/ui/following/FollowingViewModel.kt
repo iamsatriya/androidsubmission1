@@ -1,4 +1,4 @@
-package com.satriyawicaksana888.androidsubmission1.ui.followers
+package com.satriyawicaksana888.androidsubmission1.ui.following
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,23 +6,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.loopj.android.http.AsyncHttpResponseHandler
 import com.satriyawicaksana888.androidsubmission1.data.SearchUser
+import com.satriyawicaksana888.androidsubmission1.ui.followers.FollowersViewModel
 import com.satriyawicaksana888.androidsubmission1.utility.GithubAccess
 import cz.msebera.android.httpclient.Header
 import org.json.JSONArray
 import java.lang.Exception
 
-class FollowersViewModel : ViewModel() {
+class FollowingViewModel : ViewModel() {
     companion object {
-        val TAG = FollowersViewModel::class.java.simpleName
+        val TAG = FollowingViewModel::class.java.simpleName
     }
-
-    val listFollowerLiveData = MutableLiveData<ArrayList<SearchUser>>()
-
-    fun setListFolllowers(username: String?) {
-        val listFollower = ArrayList<SearchUser>()
+    val listFollowing = MutableLiveData<ArrayList<SearchUser>>()
+    fun setListFollowing(username: String?) {
+        val list = ArrayList<SearchUser>()
         val client = GithubAccess.createClient()
         client.get(
-            username?.let { GithubAccess.urlFollowerUser(it) },
+            username?.let { GithubAccess.urlFollowingUser(it) },
             object : AsyncHttpResponseHandler() {
                 override fun onSuccess(
                     statusCode: Int,
@@ -36,9 +35,9 @@ class FollowersViewModel : ViewModel() {
                             val user = SearchUser()
                             user.username = resultArray.getJSONObject(i).getString("login")
                             user.avatars = resultArray.getJSONObject(i).getString("avatar_url")
-                            listFollower.add(user)
+                            list.add(user)
                         }
-                        listFollowerLiveData.postValue(listFollower)
+                        listFollowing.postValue(list)
                     } catch (e: Exception) {
                         Log.d(TAG, "onFailedFetch: ${e.message}")
                     }
@@ -55,9 +54,7 @@ class FollowersViewModel : ViewModel() {
 
             })
     }
-
-    fun getListFollowers(): LiveData<ArrayList<SearchUser>> {
-        return listFollowerLiveData
+    fun getListFollowing(): LiveData<ArrayList<SearchUser>> {
+        return listFollowing
     }
-
 }
