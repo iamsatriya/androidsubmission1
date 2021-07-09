@@ -12,10 +12,10 @@ class GithubAccess {
             return "https://api.github.com/users/${username.trim()}"
         }
         fun urlFollowerUser(username: String):String{
-            return "https://api.github.com/users/{${username.trim()}}/followers"
+            return "https://api.github.com/users/${username.trim()}/followers"
         }
         fun urlFollowingUser(username: String):String{
-            return "https://api.github.com/users/{${username.trim()}}/following"
+            return "https://api.github.com/users/${username.trim()}/following"
         }
         fun createClient(): AsyncHttpClient {
             val client = AsyncHttpClient()
